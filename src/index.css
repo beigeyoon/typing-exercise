@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendar", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-jersey: "Jersey 10", ui-sans-serif, system-ui, sans-serif;
+  --font-orbit: "Orbit", ui-sans-serif, system-ui, sans-serif;
+}
