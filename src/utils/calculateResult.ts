@@ -1,11 +1,4 @@
-const complexJungsungIndex = [9, 10, 11, 14, 15, 16, 19];
-const complexJongsungIndex = [3, 5, 6, 9, 10, 11, 12, 13, 14, 15, 18];
-
-const CHO_PERIOD = Math.floor('까'.charCodeAt(0) - '가'.charCodeAt(0)); // 588 ( 28 * 21 )
-const JUNG_PERIOD = Math.floor('개'.charCodeAt(0) - '가'.charCodeAt(0)); // 28
-
-const HANGUL_START_CHARCODE = '가'.charCodeAt(0);
-const HANGUL_END_CHARCODE = '힣'.charCodeAt(0);
+import { complexJungsungIndex, complexJongsungIndex, CHO_PERIOD, JUNG_PERIOD, HANGUL_START_CHARCODE, HANGUL_END_CHARCODE } from "@/constants";
 
 const isHangul = (letterCode: number): boolean => {
   return HANGUL_START_CHARCODE <= letterCode && letterCode <= HANGUL_END_CHARCODE;
