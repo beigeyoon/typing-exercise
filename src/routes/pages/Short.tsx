@@ -9,8 +9,9 @@ export default function Short() {
   const {
     currentSentence,
     accuracy,
-    cpm,
+    cpmHistory,
     isTyping,
+    timeCount,
     errorIndex,
     handleInputChange,
     handleFinish
@@ -28,23 +29,26 @@ export default function Short() {
   ), [currentSentence, errorIndex]);
 
   return (
-    <div className='flex flex-col gap-8 w-2xl mx-auto'>
+    <div className='flex flex-col gap-8 w-full'>
       <div className='flex flex-col gap-3 border-2 p-6 text-2xl leading-none'>
-        <div className='flex justify-between'>
-          <div>{renderSentence}</div>
+        <div className='flex justify-between relative'>
+          <div className='font-bold'>{renderSentence}</div>
           {isTyping && (
-            <motion.img
-              src={TypingIcon}
-              className='w-[24px]'
-              animate={{
-                scale: [1, 0.8, 1],
-              }}
-              transition={{
-                duration: 1.8,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            <div className='absolute top-[-58px] right-[-20px] flex items-center justify-between w-[62px]'>
+              <span className='text-sm'>{timeCount}</span>
+              <motion.img
+                src={TypingIcon}
+                className='w-[24px]'
+                animate={{
+                  scale: [1, 0.8, 1],
+                }}
+                transition={{
+                  duration: 1.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            </div>
           )}
         </div>
         <input
@@ -61,9 +65,7 @@ export default function Short() {
           onBlur={() => inputRef.current?.focus()}
         />
       </div>
-      {cpm !== null && accuracy !== null && (
-        <Result cpm={cpm} accuracy={accuracy} />
-      )}
+      <Result cpmHistory={cpmHistory} accuracy={accuracy} />
     </div>
   )
 }

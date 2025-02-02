@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { calculateResult } from "@/utils/calculateResult";
 import { sentences } from "@/constants/short";
 
@@ -7,10 +7,11 @@ export const useTypingExercise = (inputRef: React.RefObject<HTMLInputElement>) =
   const [inputValue, setInputValue] = useState<string>("");
   const [startTime, setStartTime] = useState<number | null>(null);
   const [accuracy, setAccuracy] = useState<number>(100);
-  const [cpm, setCpm] = useState<number>(0);
   const [cpmHistory, setCpmHistory] = useState<number[]>([]);
   const [errorIndex, setErrorIndex] = useState<number[]>([]);
-
+  const [timeCount, setTimeCount] = useState<number>(0);
+  const timerRef = useRef(0);
+  
   useEffect(() => {
     if (inputRef.current) inputRef.current?.focus();
   }, [currentSentence]);
@@ -30,11 +31,32 @@ export const useTypingExercise = (inputRef: React.RefObject<HTMLInputElement>) =
     setErrorIndex(errors);
   }, [inputValue]);
 
+  const isTyping = useMemo(() => startTime !== null, [startTime]);
+
+  useEffect(() => {
+    if (isTyping) {
+      timerRef.current = setInterval(() => {
+        setTimeCount((prev) => parseFloat((prev + 0.01).toFixed(3)));
+      }, 10);
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = 0;
+        setTimeCount(0);
+      }
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isTyping]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!startTime) setStartTime(Date.now());
     const value = e.target.value;
     setInputValue(value);
-    if (value.length > currentSentence.length) handleFinish();
+    if (value.length > currentSentence.length && accuracy >= 50) handleFinish();
   };
 
   const handleFinish = () => {
@@ -44,7 +66,6 @@ export const useTypingExercise = (inputRef: React.RefObject<HTMLInputElement>) =
       startTime: startTime!
     });
     setAccuracy(accuracy);
-    setCpm(cpm);
     setCpmHistory((prev) => [...prev, cpm]);
     setCurrentSentence(sentences[Math.floor(Math.random() * sentences.length)]);
     setInputValue("");
@@ -56,9 +77,9 @@ export const useTypingExercise = (inputRef: React.RefObject<HTMLInputElement>) =
   return {
     currentSentence,
     accuracy,
-    cpm,
     cpmHistory,
-    isTyping: startTime !== null,
+    isTyping,
+    timeCount,
     errorIndex,
     handleInputChange,
     handleFinish,
