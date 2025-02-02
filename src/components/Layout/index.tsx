@@ -8,7 +8,7 @@ export default function Layout() {
           TYPING EXERCISE
         </h1>
       </header>
-      <main className='mx-auto w-[680px]'>
+      <main className='mx-auto w-[660px]'>
         <Outlet />
       </main>
       <footer className='absolute bottom-0 w-full text-lg text-center py-8 font-jersey'>
