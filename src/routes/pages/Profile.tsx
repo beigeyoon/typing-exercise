@@ -1,4 +1,4 @@
-import yooni from '@/assets/yooni.png'
+import yooni from '@/assets/yooni.webp';
 
 export default function Profile() {
   return (
