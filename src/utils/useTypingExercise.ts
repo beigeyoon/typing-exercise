@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { calculateResult } from "@/utils/calculateResult";
-import { sentences } from "@/constants/short";
+import { koreanSentences, englishSentences } from "@/constants/sentences";
 
-export const useTypingExercise = (inputRef: React.RefObject<HTMLInputElement>) => {
-  const [currentSentence, setCurrentSentence] = useState<string>(sentences[Math.floor(Math.random() * sentences.length)]);
+export const useTypingExercise = (inputRef: React.RefObject<HTMLInputElement>, isEnglish: boolean = false) => {
+  const sentenceArray = isEnglish ? englishSentences : koreanSentences;
+  const [currentSentence, setCurrentSentence] = useState<string>(sentenceArray[Math.floor(Math.random() * sentenceArray.length)]);
   const [inputValue, setInputValue] = useState<string>("");
   const [startTime, setStartTime] = useState<number | null>(null);
   const [accuracy, setAccuracy] = useState<number>(100);
@@ -63,11 +64,12 @@ export const useTypingExercise = (inputRef: React.RefObject<HTMLInputElement>) =
     const { accuracy, cpm } = calculateResult({
       currentSentence,
       inputValue,
-      startTime: startTime!
+      startTime: startTime!,
+      isEnglish
     });
     setAccuracy(accuracy);
     setCpmHistory((prev) => [...prev, cpm]);
-    setCurrentSentence(sentences[Math.floor(Math.random() * sentences.length)]);
+    setCurrentSentence(sentenceArray[Math.floor(Math.random() * sentenceArray.length)]);
     setInputValue("");
     if (inputRef.current) inputRef.current.value = "";
     setStartTime(null);
