@@ -1,4 +1,4 @@
-import { complexJungsungIndex, complexJongsungIndex, CHO_PERIOD, JUNG_PERIOD, HANGUL_START_CHARCODE, HANGUL_END_CHARCODE } from "@/constants";
+import { complexJungsungIndex, complexJongsungIndex, CHO_PERIOD, JUNG_PERIOD, HANGUL_START_CHARCODE, HANGUL_END_CHARCODE } from "@/constants/korean";
 
 const isHangul = (letterCode: number): boolean => {
   return HANGUL_START_CHARCODE <= letterCode && letterCode <= HANGUL_END_CHARCODE;
@@ -29,18 +29,28 @@ const calculateTotalChars = (text: string): number => {
   }, 0);
 };
 
-export const calculateResult = ({ currentSentence, inputValue, startTime }: {
+export const calculateResult = ({ currentSentence, inputValue, startTime, isEnglish = false }: {
   currentSentence: string;
   inputValue: string;
   startTime: number;
+  isEnglish?: boolean;
 }) => {
   const correctChars = currentSentence.slice(0, inputValue.length);
   const matchedChars = correctChars.split("").filter((char, i) => char === inputValue[i]).length;
   const calculatedAccuracy = Math.round((matchedChars / currentSentence.length) * 100);
 
   const elapsedTime = (Date.now() - startTime!) / 1000 / 60; // 시간(분)
-  const totalChars = calculateTotalChars(inputValue); // 입력된 자모 수
-  const calculatedCpm = Math.round(totalChars / elapsedTime);
+  
+  let calculatedCpm;
+  if (isEnglish) {
+    // 영어의 경우 CPM(Characters Per Minute) 계산
+    const totalChars = inputValue.length;
+    calculatedCpm = Math.round(totalChars / elapsedTime);
+  } else {
+    // 한글의 경우 CPM(Characters Per Minute) 계산
+    const totalChars = calculateTotalChars(inputValue);
+    calculatedCpm = Math.round(totalChars / elapsedTime);
+  }
 
   return {
     accuracy: calculatedAccuracy,

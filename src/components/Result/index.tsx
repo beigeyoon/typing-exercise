@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 
-const Result = ({ accuracy, cpmHistory }: { cpmHistory: number[], accuracy: number }) => {
+const Result = ({ accuracy, cpmHistory, isEnglish = false }: { cpmHistory: number[], accuracy: number, isEnglish?: boolean }) => {
   const currentCpm = useMemo(() => cpmHistory.length > 0 ? cpmHistory[cpmHistory.length - 1] : 0, [cpmHistory]);
   const cpmAverage = useMemo(() => cpmHistory.length > 0 ? cpmHistory.reduce((sum, value) => sum + value, 0) / cpmHistory.length : 0, [cpmHistory]);
   const [bestCpm, setBestCpm] = useState<number>(0);
