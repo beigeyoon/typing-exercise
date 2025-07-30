@@ -69,7 +69,7 @@ export default function Practice() {
           onBlur={() => inputRef.current?.focus()}
         />
       </div>
-      <Result cpmHistory={cpmHistory} accuracy={accuracy} isEnglish={isEnglish} />
+      <Result cpmHistory={cpmHistory} accuracy={accuracy} />
     </div>
   )
 }
